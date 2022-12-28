@@ -31,9 +31,6 @@ serve(async (_req) => {
     "floor_price": floorPrice
   }
   await fetch(`${ntfyUrl}/${projectId}floorprice`, { method: "POST", body: JSON.stringify(response)})
-  return new Response(JSON.stringify(response), {
-    headers: { "content-type": "application/json" },
-
-  });
+  return new Response(undefined, { status: 200}  );
 }
 );
