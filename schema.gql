@@ -1,0 +1,8 @@
+type Notification {
+    address: String!
+    projects: [String!]
+}
+
+type Query {
+    allNotifications: [Notification!]
+}

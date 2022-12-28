@@ -1,52 +1,117 @@
-
 import "https://deno.land/x/dotenv/load.ts";
 
-const hyperspaceRestUrl = 'https://beta.api.solanalysis.com/rest'
-const ntfyUrl = 'https://ntfy.sh'
-const apiKey = Deno.env.get("HYPERSPACE_API_KEY")
+const hyperspaceRestUrl = "https://beta.api.solanalysis.com/rest";
+const ntfyUrl = "https://ntfy.sh";
+const apiKey = Deno.env.get("HYPERSPACE_API_KEY");
 
-if (typeof apiKey !== 'string') {
-  console.log('HYPERSPACE_API_KEY not found')
-  Deno.exit(1)
+if (typeof apiKey !== "string") {
+  console.log("HYPERSPACE_API_KEY not found");
+  Deno.exit(1);
 }
 
+async function queryFauna(
+  query: string,
+  variables: { [key: string]: unknown }
+): Promise<{
+  data?: any;
+  error?: any;
+}> {
+  // Grab the secret from the environment.
+  const token = Deno.env.get("FAUNA_SECRET");
+  if (!token) {
+    throw new Error("environment variable FAUNA_SECRET not set");
+  }
+
+  try {
+    // Make a POST request to fauna's graphql endpoint with body being
+    // the query and its variables.
+    const res = await fetch("https://graphql.us.fauna.com/graphql", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
+    });
+
+    const { data, errors } = await res.json();
+    if (errors) {
+      // Return the first error if there are any.
+      return { data, error: errors[0] };
+    }
+
+    return { data };
+  } catch (error) {
+    return { error };
+  }
+}
+
+const getProjects = async () => {
+  const query = `
+  query allNotifications{
+    allNotifications {
+      data {
+        address
+        projects
+      }
+    }
+  }`;
+  const { data } = await queryFauna(query, {});
+  return data;
+};
 
 const serveHttp = async (conn: Deno.Conn) => {
   const httpConn = Deno.serveHttp(conn);
   for await (const requestEvent of httpConn) {
-    const response = handleRequest(requestEvent)
-    requestEvent.respondWith(response)
+    const response = handleRequest(requestEvent);
+    requestEvent.respondWith(response);
   }
-}
+};
 
-const handleRequest = async (_req : any) => {
-  const res = await fetch(hyperspaceRestUrl + '/get-project-stats', {
-    method: "POST",
-    headers: {
-      "Authorization": apiKey,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      "conditions":{
-        "project_ids":[
-          "okaybears"
-        ]
-      }
-    })
-  })
-  const json = await res.json()
-  const projectId = json.project_stats[0].project_id
-  const floorPrice = json.project_stats[0].floor_price
+const handleRequest = async (_req: any) => {
+  const subscriptions = await getProjects();
+  for (const sub of subscriptions.allNotifications.data) {
+    const { address, projects } = sub;
+    const res = await fetch(hyperspaceRestUrl + "/get-project-stats", {
+      method: "POST",
+      headers: {
+        Authorization: apiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        conditions: {
+          project_ids: projects,
+        },
+      }),
+    });
+    const json = await res.json();
 
-  const response = {
-    "project_id": projectId,
-    "floor_price": floorPrice
+    const prices = [];
+    for (const project of json.project_stats) {
+      prices.push({
+        project: project.project_id,
+        floor_price: parseFloat(project.floor_price).toLocaleString(undefined, {
+          maximumFractionDigits: 3,
+        }),
+      });
+    }
+
+    const response = {
+      prices: prices,
+    };
+
+    await fetch(`${ntfyUrl}/${address}-subs`, {
+      method: "POST",
+      body: JSON.stringify(response),
+    });
   }
-  await fetch(`${ntfyUrl}/${projectId}floorprice`, { method: "POST", body: JSON.stringify(response)}) 
-  return new Response(undefined, { status: 200}  );
-}
+  return new Response(undefined, { status: 200 });
+};
 
-const server = Deno.listen({ port: Number(Deno.env.get("PORT")) ?? 8000})
+const server = Deno.listen({ port: Number(Deno.env.get("PORT")) ?? 8000 });
 for await (const conn of server) {
-  serveHttp(conn)
+  serveHttp(conn);
 }
