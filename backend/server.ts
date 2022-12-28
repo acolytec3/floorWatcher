@@ -16,15 +16,12 @@ async function queryFauna(
   data?: any;
   error?: any;
 }> {
-  // Grab the secret from the environment.
   const token = Deno.env.get("FAUNA_SECRET");
   if (!token) {
     throw new Error("environment variable FAUNA_SECRET not set");
   }
 
   try {
-    // Make a POST request to fauna's graphql endpoint with body being
-    // the query and its variables.
     const res = await fetch("https://graphql.us.fauna.com/graphql", {
       method: "POST",
       headers: {
@@ -66,12 +63,12 @@ const getProjects = async () => {
 const serveHttp = async (conn: Deno.Conn) => {
   const httpConn = Deno.serveHttp(conn);
   for await (const requestEvent of httpConn) {
-    const response = handleRequest(requestEvent);
+    const response = pushNotifications(requestEvent);
     requestEvent.respondWith(response);
   }
 };
 
-const handleRequest = async (_req: any) => {
+const pushNotifications = async (_req: any) => {
   const subscriptions = await getProjects();
   for (const sub of subscriptions.allNotifications.data) {
     const { address, projects } = sub;
