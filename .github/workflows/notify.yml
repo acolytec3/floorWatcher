@@ -6,7 +6,7 @@ on:
 
 jobs:
   notify_friends:
-    runs-on: alpine
+    runs-on: ubuntu-latest
     steps:
       - name: Call notification service
         run: curl https://acolytec3-floor-atcher.deno.dev
