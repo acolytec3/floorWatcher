@@ -1,10 +1,12 @@
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
+import "https://deno.land/x/dotenv/load.ts";
 
 const hyperspaceRestUrl = 'https://beta.api.solanalysis.com/rest'
 const ntfyUrl = 'https://ntfy.sh'
 const apiKey = Deno.env.get("HYPERSPACE_API_KEY")
 
 if (typeof apiKey !== 'string') {
+  console.log('HYPERSPACE_API_KEY not found')
   Deno.exit(1)
 }
 serve(async (_req) => {
@@ -30,7 +32,7 @@ serve(async (_req) => {
     "project_id": projectId,
     "floor_price": floorPrice
   }
-  await fetch(`${ntfyUrl}/${projectId}floorprice`, { method: "POST", body: JSON.stringify(response)})
+  await fetch(`${ntfyUrl}/${projectId}floorprice`, { method: "POST", body: JSON.stringify(response)}) 
   return new Response(undefined, { status: 200}  );
-}
+}, { port: Number(Deno.env.get("PORT")) ?? 8000}
 );
