@@ -9,7 +9,7 @@ This is an experimental notification service for Solana NFT floor prices with th
 
 ## Roadmap
 
-- [] Build a front-end using Deno Fresh to allow users to subscribe to the notification service
-- [] Allow users to create their own subscriptions
-- [] Store subscriptions in FaunaDB
-- [] Ensure scheduler endpoint only accepts incoming requests from Github
+- [ ] Build a front-end using Deno Fresh to allow users to subscribe to the notification service
+- [ ] Allow users to create their own subscriptions
+- [ ] Store subscriptions in FaunaDB
+- [ ] Ensure scheduler endpoint only accepts incoming requests from Github
