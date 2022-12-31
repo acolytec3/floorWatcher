@@ -1,5 +1,6 @@
-import { useState } from "preact/hooks";
+import { useSignal } from "@preact/signals";
 import { Button } from "../components/Button.tsx";
+import NotificationForm from "../components/NotificationForm.tsx";
 
 
 const getProvider = async () => {
@@ -11,15 +12,19 @@ const getProvider = async () => {
         const resp = await provider.connect()
         return resp.publicKey.toString()
       }
+
+      return ""
     }
 };
 
+
 export default function Address() {
-  const [address, setAddress] = useState("Unknown Address");
+  const address = useSignal("");
   return (
     <div class="flex gap-2">
-      <Button onClick={() => getProvider().then(res => setAddress(res))}>Get address</Button>
+      <Button onClick={() => getProvider().then(res => address.value = res)}>Get address</Button>
       {address}
+      {address !== "" && <NotificationForm address={address.value} />}
     </div>
   );
 }
