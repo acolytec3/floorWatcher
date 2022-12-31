@@ -17,14 +17,13 @@ const NotificationForm = (props: FormProps): any => {
                   address: props.address,
                   projects: [projects.value]
                 }) })
-    console.log('we head something', res)
   };
   return (
     <div>
       <form onSubmit={createSubscription}>
         Projects
         <input type="text" name="projects" value={projects.value} onChange={(e) => projects.value = e.currentTarget.value}/>
-        <button type="submit">Subscribe to cheese</button>
+        <button type="submit">Subscribe to floor price notifications</button>
       </form>
     </div>
   );
