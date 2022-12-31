@@ -1,15 +1,15 @@
 import { useSignal } from "@preact/signals";
 
 const NotificationForm = (props: any): any => {
-  console.log("rendering the form!", props);
+  const backend = Deno.env.get('BACKEND_URL') || 'https://localhost:8002/subscriptions'
   const projects = useSignal("")
   const createSubscription = async (req: any) => {
     console.log("we am handling", projects.value);
     req.preventDefault()
-    const res = await fetch('http://localhost:8002/subscriptions', { method: "POST", mode: 'no-cors', headers: {
+    const res = await fetch(backend, { method: "POST", mode: 'no-cors', headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json',
-                  'Access-Control-Allow-Origin': 'http://localhost:8002/subscriptions'
+                  'Access-Control-Allow-Origin': backend
                 }, body: JSON.stringify({
                   address: props.address,
                   projects: [projects.value]
