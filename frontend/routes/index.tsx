@@ -20,7 +20,7 @@ export default function Home(props: PageProps<Url>) {
       </Head>
       <div class="p-4 mx-auto max-w-screen-md">
         <p class="my-6">
-          Let's setup some notifications
+          Lets setup some floor price notifications
         </p>
         <Address url={props.data.url}/>
       </div>

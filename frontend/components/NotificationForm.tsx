@@ -22,7 +22,7 @@ const NotificationForm = (props: FormProps): any => {
     <div>
       <form onSubmit={createSubscription}>
         Projects
-        <input type="text" name="projects" value={projects.value} onChange={(e) => projects.value = e.currentTarget.value}/>
+        <input class="border-2 border-black-500 mx-2" type="text" name="projects" value={projects.value} onChange={(e) => projects.value = e.currentTarget.value}/>
         <button type="submit">Subscribe to floor price notifications</button>
       </form>
     </div>

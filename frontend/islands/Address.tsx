@@ -24,8 +24,8 @@ export default function Address(props: Url) {
   const address = useSignal("");
   return (
     <div class="flex gap-2">
-      <Button onClick={() => getProvider().then(res => address.value = res)}>Get address</Button>
-      {address}
+      <Button onClick={() => getProvider().then(res => address.value = res)}>Connect Wallet</Button>
+      Address: {address}
       {address !== "" && <NotificationForm address={address.value} url={props.url}/>}
     </div>
   );
