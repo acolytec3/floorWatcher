@@ -2,7 +2,6 @@ import { useSignal } from "@preact/signals";
 import { Button } from "../components/Button.tsx";
 import NotificationForm from "../components/NotificationForm.tsx";
 
-
 const getProvider = async () => {
 
     if ('phantom' in window) {
@@ -17,14 +16,17 @@ const getProvider = async () => {
     }
 };
 
+interface Url {
+  url: string
+}
 
-export default function Address() {
+export default function Address(props: Url) {
   const address = useSignal("");
   return (
     <div class="flex gap-2">
       <Button onClick={() => getProvider().then(res => address.value = res)}>Get address</Button>
       {address}
-      {address !== "" && <NotificationForm address={address.value} />}
+      {address !== "" && <NotificationForm address={address.value} url={props.url}/>}
     </div>
   );
 }
