@@ -1,7 +1,7 @@
 import { useSignal } from "@preact/signals";
 
 const NotificationForm = (props: any): any => {
-  const backend = Deno.env.get('BACKEND_URL') || 'https://localhost:8002/subscriptions'
+  const backend = 'https://acolytec3-floor-atcher.deno.dev/subscriptions'
   const projects = useSignal("")
   const createSubscription = async (req: any) => {
     console.log("we am handling", projects.value);
