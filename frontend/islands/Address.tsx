@@ -9,10 +9,16 @@ const getProvider = async () => {
   
       if (provider?.isPhantom) {
         const resp = await provider.connect()
-        return resp.publicKey.toString()
-      }
+        const msg = `logging in with phantom at ${Date.now()}`
+        const encodedMessage = new TextEncoder().encode(msg)
+        const signedMessage = await provider.signMessage(encodedMessage, 'utf8')
+        return {
+          address: resp.publicKey.toString(),
+          signature: signedMessage,
+          message: msg
+      }}
 
-      return ""
+      return {}
     }
 };
 
@@ -21,11 +27,11 @@ interface Url {
 }
 
 export default function Address(props: Url) {
-  const address = useSignal("");
+  const address = useSignal({});
   return (
     <div class="flex gap-2">
       <Button onClick={() => getProvider().then(res => address.value = res)}>Connect Wallet</Button>
-      Address: {address}
+      Address: {address.value.address}
       {address !== "" && <NotificationForm address={address.value} url={props.url}/>}
     </div>
   );

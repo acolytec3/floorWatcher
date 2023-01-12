@@ -14,5 +14,40 @@
     "https://deno.land/x/dotenv@v3.2.0/load.ts": "cbd76a0aee01aad8d09222afaa1dd04b84d9d3e44637503b01bf77a91df9e041",
     "https://deno.land/x/dotenv@v3.2.0/mod.ts": "077b48773de9205266a0b44c3c3a3c3083449ed64bb0b6cc461b95720678d38e",
     "https://deno.land/x/dotenv@v3.2.0/util.ts": "693730877b13f8ead2b79b2aa31e2a0652862f7dc0c5f6d2f313f4d39c7b7670"
+  },
+  "npm": {
+    "specifiers": {
+      "@noble/ed25519@1.7.1": "@noble/ed25519@1.7.1",
+      "@scure/base@1.1.1": "@scure/base@1.1.1",
+      "base58": "base58@2.0.1",
+      "bs58": "bs58@5.0.0",
+      "tweetnacl": "tweetnacl@1.0.3"
+    },
+    "packages": {
+      "@noble/ed25519@1.7.1": {
+        "integrity": "sha512-Rk4SkJFaXZiznFyC/t77Q0NKS4FL7TLJJsVG2V2oiEq3kJVeTdxysEe/yRWSpnWMe808XRDJ+VFh5pt/FN5plw==",
+        "dependencies": {}
+      },
+      "@scure/base@1.1.1": {
+        "integrity": "sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA==",
+        "dependencies": {}
+      },
+      "base-x@4.0.0": {
+        "integrity": "sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==",
+        "dependencies": {}
+      },
+      "base58@2.0.1": {
+        "integrity": "sha512-qK6gt2fMSxN2xGOi+btI5oAnXL+vEq0AsHWHhf5jfm2hE6MwmW+2414qF96utV3Xfg3En8hEA9Q4lif4lbXcgw==",
+        "dependencies": {}
+      },
+      "bs58@5.0.0": {
+        "integrity": "sha512-r+ihvQJvahgYT50JD05dyJNKlmmSlMoOGwn1lCcEzanPglg7TxYjioQUYehQ9mAR/+hOSd2jRc/Z2y5UxBymvQ==",
+        "dependencies": { "base-x": "base-x@4.0.0" }
+      },
+      "tweetnacl@1.0.3": {
+        "integrity": "sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==",
+        "dependencies": {}
+      }
+    }
   }
 }
